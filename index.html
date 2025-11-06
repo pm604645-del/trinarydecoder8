@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TrinaryDecoder\Encoder</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <style>
+    body {
+      background-color: #000;
+      color: #00aaff;
+      font-family: monospace;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .panel {
+      display: flex;
+      flex-direction: column;
+    }
+
+    textarea {
+      width: 320px;          /* medium width */
+      height: 200px;         /* medium height */
+      background-color: #0a0a0a;
+      color: #00aaff;
+      border: 1px solid #0088ff;
+      border-radius: 8px;
+      font-size: 13px;
+      padding: 8px;
+      resize: none;
+      box-shadow: 0 0 10px #0044aa;
+      transition: all 0.2s ease;
+    }
+
+    textarea:focus {
+      outline: none;
+      box-shadow: 0 0 16px #00bbff;
+      border-color: #00bbff;
+    }
+
+    .center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    button {
+      background-color: #0088ff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 7px 16px;
+      cursor: pointer;
+      font-size: 13px;
+      margin: 4px 0;
+      box-shadow: 0 0 10px #6897cc;
+      transition: 0.2s;
+      width: 130px;
+    }
+
+    button.big {
+      font-weight: bold;
+      padding: 9px 20px;
+      font-size: 14px;
+    }
+
+    button:hover {
+      background-color: #00aaff;
+      box-shadow: 0 0 15px #00bbff;
+      transform: scale(1.05);
+    }
+
+    #copyOut {
+      background-color: #0066cc;
+    }
+
+    #copyOut:hover {
+      background-color: #0099ff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="panel left">
+      <textarea id="inputText" placeholder="Enter text or code..."></textarea>
+    </div>
+
+    <div class="center">
+      <button id="encBtn" class="big">Encrypt</button>
+      <button id="decBtn">Decrypt</button>
+      <button id="swapBtn">Swap</button>
+      <button id="clearBtn">Clear</button>
+      <div style="height:16px;"></div>
+      <button id="copyOut">Copy Output</button>
+    </div>
+
+    <div class="panel right">
+      <textarea id="outputText" placeholder="Output..." readonly></textarea>
+    </div>
+  </div>
+
+  <script>
+    const encBtn = document.getElementById('encBtn')
+    const decBtn = document.getElementById('decBtn')
+    const swapBtn = document.getElementById('swapBtn')
+    const clearBtn = document.getElementById('clearBtn')
+    const copyOut = document.getElementById('copyOut')
+    const inputText = document.getElementById('inputText')
+    const outputText = document.getElementById('outputText')
+
+    encBtn.onclick = async () => {
+      const text = inputText.value
+      const res = await fetch('/api/encode', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({text})
+      })
+      const j = await res.json()
+      if (j.encoded) outputText.value = j.encoded
+      else outputText.value = j.error || 'Error'
+    }
+
+    decBtn.onclick = async () => {
+      const code = inputText.value.trim()
+      const res = await fetch('/api/decode', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({code})
+      })
+      const j = await res.json()
+      if (j.decoded) outputText.value = j.decoded
+      else outputText.value = j.error || 'Error'
+    }
+
+    swapBtn.onclick = () => {
+      const a = inputText.value
+      inputText.value = outputText.value
+      outputText.value = a
+    }
+
+    clearBtn.onclick = () => {
+      inputText.value = ''
+      outputText.value = ''
+    }
+
+    copyOut.onclick = async () => {
+      try {
+        await navigator.clipboard.writeText(outputText.value)
+        alert('Output copied to clipboard!')
+      } catch (e) {
+        alert('Clipboard failed')
+      }
+    }
+  </script>
+</body>
+</html>

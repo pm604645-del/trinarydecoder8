@@ -1,0 +1,82 @@
+:root{
+  --bg:#06100b;
+  --panel:#07120c;
+  --neon:#00ff66;
+  --muted:#06321a;
+}
+
+*{box-sizing:border-box;font-family: "Consolas",monospace}
+
+html,body{
+  height:100%;
+  margin:0;
+  background: radial-gradient(ellipse at center, #001204 0%, #000000 60%);
+  color:var(--neon);
+}
+
+.container{
+  display:flex;
+  gap:24px;
+  padding:28px;
+  height:100vh;
+  align-items:stretch;
+}
+
+.panel{
+  background: linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.05));
+  border: 1px solid rgba(0,255,102,0.08);
+  box-shadow: 0 0 40px rgba(0,255,102,0.02), 0 0 0 6px rgba(0,255,102,0.015) inset;
+  border-radius:12px;
+  padding:12px;
+  flex:1;
+}
+
+.left{flex:1.2}
+.right{flex:1.2}
+
+textarea{
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.85);
+  color:var(--neon);
+  border-radius:8px;
+  border:1px solid rgba(0,255,102,0.06);
+  padding:16px;
+  resize:none;
+  outline:none;
+  font-size:16px;
+  box-shadow: 0 0 20px rgba(0,255,102,0.02) inset;
+}
+
+.center{
+  width:200px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:12px;
+  padding-top:24px;
+}
+
+button{
+  width:160px;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid rgba(0,255,102,0.12);
+  background:transparent;
+  color:var(--neon);
+  cursor:pointer;
+  font-weight:600;
+  box-shadow: 0 8px 24px rgba(0,255,102,0.02);
+}
+
+button.big{
+  width:180px;
+  background:linear-gradient(180deg, rgba(0,255,102,0.12), rgba(0,255,102,0.02));
+  color:#002e12;
+  border:1px solid rgba(0,255,102,0.25);
+}
+
+button:hover{
+  transform:translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0,255,102,0.08);
+}
